@@ -39,7 +39,7 @@ public class User {
     private Gender gender;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Peminjaman> peminjamans = new ArrayList<>();
 }
 

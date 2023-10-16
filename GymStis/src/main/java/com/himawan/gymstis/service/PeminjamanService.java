@@ -1,12 +1,20 @@
 package com.himawan.gymstis.service;
 
-import com.himawan.gymstis.dto.PeminjamanResponse;
+import com.himawan.gymstis.dto.PeminjamanStatusRequest;
+import com.himawan.gymstis.dto.PeminjamanStatusResponse;
+import com.himawan.gymstis.dto.PeminjamanUserResponse;
+import com.himawan.gymstis.entity.Peminjaman;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface PeminjamanService {
-    PeminjamanResponse createPeminjaman(LocalDate tanggal);
-    PeminjamanResponse approvePeminjaman(Long id);
+    PeminjamanUserResponse createPeminjaman(LocalDate tanggal);
+    PeminjamanStatusResponse approvePeminjaman(Peminjaman peminjaman);
 
-    PeminjamanResponse denyPeminjaman(Long id);
+    PeminjamanStatusResponse denyPeminjaman(Peminjaman peminjaman);
+
+    List<PeminjamanUserResponse> getUserPeminjaman();
+
+    PeminjamanStatusResponse changeStatusPeminjaman(Long id, PeminjamanStatusRequest status);
 }

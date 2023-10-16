@@ -9,9 +9,10 @@ import java.util.List;
 
 public interface JadwalService {
     JadwalResponse createJadwal(LocalDate date, Gender gender, Integer kuota);
-    List<JadwalResponse> checkJadwal();
     Jadwal findByDate(LocalDate date);
     void saveJadwal(Jadwal jadwal);
 
     JadwalResponse editJadwal(LocalDate date, Gender gender, Integer kuota);
+
+    List<JadwalResponse> checkJadwalAvailable();
 }

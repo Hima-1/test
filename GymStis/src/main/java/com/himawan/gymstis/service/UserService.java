@@ -11,7 +11,7 @@ public interface UserService {
     ProfileResponse changeProfile(String name, String email, Gender gender);
     ProfileResponse changePassword(String password);
 
-    void deleteUser(Long id);
+    ProfileResponse deleteUser(Long id);
 
     void deleteCurrentUser();
 

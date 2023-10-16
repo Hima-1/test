@@ -29,7 +29,7 @@ public class UserMapper {
                 .build();
     }
 
-    public static ProfileResponse MaptoUserDto(User user) {
+    public static ProfileResponse toProfileResponse(User user) {
         List<String> roleNames = user.getRoles().stream()
                 .map(role -> role.getName().name())
                 .collect(Collectors.toList());
@@ -40,15 +40,6 @@ public class UserMapper {
                 .password(user.getPassword())
                 .gender(user.getGender())
                 .roles(roleNames)
-                .build();
-    }
-
-    public static User mapToUser(ProfileResponse profileResponse) {
-        return User.builder()
-                .name(profileResponse.getName())
-                .email(profileResponse.getEmail())
-                .password(profileResponse.getPassword())
-                .gender(profileResponse.getGender())
                 .build();
     }
 }

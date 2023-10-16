@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(email);
         user.setGender(gender);
         userRepository.save(user);
-        return UserMapper.MaptoUserDto(user);
+        return UserMapper.toProfileResponse(user);
     }
 
     @Override
@@ -69,12 +69,18 @@ public class UserServiceImpl implements UserService {
         User user = getUserLogged();
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
-        return UserMapper.MaptoUserDto(user);
+        return UserMapper.toProfileResponse(user);
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public ProfileResponse deleteUser(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Error: User " + id + " tidak ditemukan");
+        }
+        User user = optionalUser.get();
         userRepository.deleteById(id);
+        return UserMapper.toProfileResponse(user);
     }
 
     @Override
@@ -92,7 +98,7 @@ public class UserServiceImpl implements UserService {
         User user = optionalUser.get();
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
-        return UserMapper.MaptoUserDto(user);
+        return UserMapper.toProfileResponse(user);
     }
 
     @Override
@@ -106,7 +112,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(email);
         user.setGender(gender);
         userRepository.save(user);
-        return UserMapper.MaptoUserDto(user);
+        return UserMapper.toProfileResponse(user);
     }
 }
 

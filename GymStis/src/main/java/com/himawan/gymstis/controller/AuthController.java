@@ -41,6 +41,12 @@ public class AuthController {
         this.userService = userService;
     }
 
+    @Operation(summary = "Login existing user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User logged in", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad Credentials", content = @Content)
+    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
         try {

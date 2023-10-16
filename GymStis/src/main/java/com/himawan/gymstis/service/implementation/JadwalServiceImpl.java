@@ -2,6 +2,7 @@ package com.himawan.gymstis.service.implementation;
 
 import com.himawan.gymstis.dto.JadwalResponse;
 import com.himawan.gymstis.entity.Jadwal;
+import com.himawan.gymstis.entity.User;
 import com.himawan.gymstis.enums.Gender;
 import com.himawan.gymstis.mapper.JadwalMapper;
 import com.himawan.gymstis.repository.JadwalRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,8 +48,17 @@ public class JadwalServiceImpl implements JadwalService{
     }
 
     @Override
-    public List<JadwalResponse> checkJadwal() {
-        List<Jadwal> jadwals = jadwalRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
+    public List<JadwalResponse> checkJadwalAvailable() {
+        User user = userService.getUserLogged();
+        LocalDate today = LocalDate.now();
+        Gender userGender = user.getGender();
+
+        List<Jadwal> jadwals = jadwalRepository.findByDateGreaterThanEqualAndGenderOrderByDateAsc(today, userGender);
+        List<Jadwal> availableJadwals = new ArrayList<>();
+        for (Jadwal jadwal : jadwals)
+            if (jadwal.getPeminjam() < jadwal.getKuota())
+                availableJadwals.add(jadwal);
+
         if (jadwals.isEmpty()) {
             throw new RuntimeException("Error: Tidak ada jadwal yang tersedia");
         }

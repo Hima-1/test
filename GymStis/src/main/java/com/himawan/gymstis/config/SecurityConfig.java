@@ -39,11 +39,18 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.GET, "/jadwal").permitAll()
-                .requestMatchers("/register").permitAll()
-                .requestMatchers("/login").permitAll()
-                .requestMatchers("/jadwal/**").hasRole("STAFF")
-                .requestMatchers("/user/**").hasRole("STAFF")
+                .requestMatchers("/register", "/login").permitAll()
+
+                .requestMatchers(HttpMethod.GET, "/jadwal/**").authenticated()
+                .requestMatchers(HttpMethod.GET, "/jadwal/search/**").authenticated()
+                .requestMatchers("/profile/**").authenticated()
+
+                .requestMatchers(HttpMethod.POST, "/api/peminjaman").hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/api/peminjaman", "/api/jadwal").hasRole("USER")
+
+                .requestMatchers(HttpMethod.PATCH, "/api/peminjaman/{id}/status").hasRole("STAFF")
+                .requestMatchers("/api/user/**", "/api/peminjaman/**", "/api/jadwal/**", "/user/**", "/jadwal/**", "/peminjaman/**").hasRole("STAFF")
+
                 .anyRequest().authenticated());
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
